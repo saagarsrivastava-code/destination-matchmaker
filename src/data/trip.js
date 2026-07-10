@@ -56,7 +56,7 @@ export const CHECKOUT = {
     { label: 'Stays · 4 nights', sub: 'Kata Beach Resort & Spa', amount: 13500 },
     { label: 'Activities & entries', sub: '6 experiences', amount: 6000 },
     { label: 'Local transfers', sub: 'Airport + intercity', amount: 3000 },
-    { label: 'Expert planning fee', sub: 'Vetted by Linh', amount: 499 },
+    { label: 'Expert planning fee', sub: 'Created by Linh', amount: 499 },
   ],
   taxes: 5001,
 }
@@ -65,7 +65,7 @@ export const fmtINR = (n) => `₹${n.toLocaleString('en-IN')}`
 // Three core value props shown at checkout.
 export const CVPS = [
   { icon: 'shield', title: 'Price-match guarantee', desc: "Find this trip cheaper elsewhere and we'll match it." },
-  { icon: 'sparkle', title: 'Scapia promise', desc: 'Every stop vetted by a local expert — or your money back.' },
+  { icon: 'sparkle', title: 'Scapia promise', desc: 'Every stop planned by a local expert — or your money back.' },
   { icon: 'phone', title: 'On-trip assistance', desc: '24×7 support from India for anything you need on the ground.' },
 ]
 
@@ -80,6 +80,18 @@ export const EXPERT = {
   title: 'Thai travel expert, living in Bangkok',
   flag: '🇹🇭',
   avatar: `${ASSET_BASE}linh.png`,
+  // Accomplishments + social proof
+  rating: 4.9,
+  reviews: 380,
+  itineraries: 1240,
+  years: 5,
+  langs: 'English · Thai · Mandarin',
+  blurb: 'Born in Chiang Mai, based in Bangkok. I plan trips that skip the tourist traps and get you into the Thailand locals love.',
+  stats: [
+    { value: '4.9★', label: '380 reviews' },
+    { value: '1,240+', label: 'itineraries created' },
+    { value: '5 yrs', label: 'local expertise' },
+  ],
 }
 export const EXPERT_FALLBACK = IMG('1573496359142-b8d87734a5a2', 200) + '&crop=faces'
 export const EXPERT_FALLBACK_LARGE = IMG('1573496359142-b8d87734a5a2', 600) + '&crop=faces'

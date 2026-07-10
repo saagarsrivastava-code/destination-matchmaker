@@ -62,7 +62,7 @@ export default function ItineraryReady() {
             <span className="avwrap__flag">{EXPERT.flag}</span>
           </span>
           <div>
-            <div className="t-lb-sm muted">Vetted by</div>
+            <div className="t-lb-sm muted">Created by</div>
             <div className="t-hd-sm">{EXPERT.name}</div>
             <span className="expert-card__verify"><Icon name="check" size={13} />{EXPERT.title}</span>
           </div>

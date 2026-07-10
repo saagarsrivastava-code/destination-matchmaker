@@ -36,7 +36,7 @@ export default function Checkout() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="t-hd-sm">{TRIP.title}</div>
             <div className="t-p-small muted" style={{ marginTop: 2 }}>{TRIP.durationDays} days · {TRIP.dateRange}</div>
-            <span className="expert-card__verify"><Icon name="check" size={13} />Vetted by {EXPERT.name}</span>
+            <span className="expert-card__verify"><Icon name="check" size={13} />Created by {EXPERT.name}</span>
           </div>
         </div>
 
