@@ -28,6 +28,16 @@ export default function ItineraryReady() {
                 <div className="day-label" style={{ fontSize: 12 }}>{day.label} · {day.date}</div>
                 {day.stops.map((stop, si) => (
                   <div key={stop.id}>
+                    {stop.flight ? (
+                      <div className="stop stop--flight" style={{ marginTop: si ? 8 : 10 }}>
+                        <span className="stop__time"><Icon name="plane" size={17} /></span>
+                        <div className="stop__body">
+                          <div className="stop__name" style={{ fontSize: 15 }}>{stop.name}</div>
+                          <div className="t-lb-sm muted" style={{ marginTop: 3 }}>{stop.time} · {stop.sub}</div>
+                          <button className="flightopt">{stop.option} <Icon name="arrowRight" size={13} /></button>
+                        </div>
+                      </div>
+                    ) : (
                     <div className="stop" style={{ marginTop: si ? 8 : 10 }}>
                       <span className="stop__time">{stop.time || '—'}</span>
                       <div className="stop__body">
@@ -35,6 +45,7 @@ export default function ItineraryReady() {
                         <div style={{ marginTop: 5 }}><CategoryPill category={stop.category} /></div>
                       </div>
                     </div>
+                    )}
                     {stop.transitAfter && (
                       <div className="transit">
                         <Icon name={stop.transitAfter.mode === 'walk' ? 'walk' : 'car'} size={15} />

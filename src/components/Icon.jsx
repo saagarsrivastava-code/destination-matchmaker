@@ -40,6 +40,7 @@ const PATHS = {
   lock: <><rect x="5.5" y="11" width="13" height="9" rx="2.5" /><path d="M8.5 11V8a3.5 3.5 0 017 0v3" /></>,
   bell: <><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" /><path d="M10 20a2 2 0 004 0" /></>,
   shield: <><path d="M12 3l7 3v5c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>,
+  plane: <path d="M21 15.5l-8-2.5V5.5a1.5 1.5 0 00-3 0V13l-8 2.5V17l8-1.5V20l-2 1.2V22l3.5-1 3.5 1v-.8L13 20v-4.5l8 1.5z" />,
 }
 
 export default function Icon({ name, size = 22, stroke = 1.8, className, style }) {

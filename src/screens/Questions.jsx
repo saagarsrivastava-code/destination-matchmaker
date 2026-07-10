@@ -5,7 +5,7 @@ import { Screen, Footer } from '../components/Chrome.jsx'
 import { Button, Stepper } from '../components/ui.jsx'
 import Icon from '../components/Icon.jsx'
 import { useFlow } from '../state/FlowContext.jsx'
-import { QUESTIONS_TOTAL, PARTY, DURATIONS, MONTHS, MONTH_FLEXIBLE, VIBES, VIBES_MAX, BUDGETS, FOOD_PREFS } from '../data/trip.js'
+import { QUESTIONS_TOTAL, PARTY, DURATIONS, MONTHS, MONTH_FLEXIBLE, VIBES, VIBES_MAX, BUDGETS, STAY_TYPES, FOOD_PREFS } from '../data/trip.js'
 
 export default function Questions() {
   const navigate = useNavigate()
@@ -32,7 +32,7 @@ export default function Questions() {
         <div style={{ marginTop: 12 }}><Stepper current={step + 1} total={QUESTIONS_TOTAL} /></div>
       </div>
 
-      <div className="screen-body pad" style={{ paddingTop: 22, paddingBottom: 20 }}>
+      <div className="screen-body pad" style={{ paddingTop: 34, paddingBottom: 20 }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -102,11 +102,14 @@ function StepBasics({ answers, setAnswer }) {
 
 /* 2 of 2 — preferences: pace, vibes, budget, notes */
 function StepPreferences({ answers, setAnswer }) {
-  const { pace, vibes, budget } = answers
+  const { pace, vibes, budget, stays } = answers
 
   function toggleVibe(v) {
     if (vibes.includes(v)) setAnswer('vibes', vibes.filter((x) => x !== v))
     else if (vibes.length < VIBES_MAX) setAnswer('vibes', [...vibes, v])
+  }
+  function toggleStay(s) {
+    setAnswer('stays', stays.includes(s) ? stays.filter((x) => x !== s) : [...stays, s])
   }
 
   return (
@@ -156,6 +159,12 @@ function StepPreferences({ answers, setAnswer }) {
           </Pill>
         ))}
       </QSection>
+
+      <QSection title="What kind of stays do you want?" hint="Pick any that fit">
+        {STAY_TYPES.map((s) => (
+          <Pill key={s} on={stays.includes(s)} onClick={() => toggleStay(s)}>{s}</Pill>
+        ))}
+      </QSection>
     </>
   )
 }
@@ -171,11 +180,11 @@ function StepFood({ answers, setAnswer }) {
       </QSection>
 
       <div style={{ marginTop: 28 }}>
-        <h2 className="q-title q-title--sm">Anything else?</h2>
+        <h2 className="q-title q-title--sm">Anything else about the trip?</h2>
         <textarea
           className="textbox"
           style={{ marginTop: 12, minHeight: 90 }}
-          placeholder="Optional — allergies, must-visits, anything we missed…"
+          placeholder="e.g. we're celebrating an anniversary, love street food, want to avoid long drives…"
           value={answers.notes}
           onChange={(e) => setAnswer('notes', e.target.value)}
         />

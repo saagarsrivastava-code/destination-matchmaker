@@ -24,6 +24,7 @@ export const TRIP = {
       label: 'Day 1 — Phuket',
       date: 'Mon 14 Dec',
       stops: [
+        { id: 'fl1', flight: true, time: '06:15', name: 'Bengaluru → Phuket', sub: 'AirAsia · 1 stop · 7h 30m', option: '3 flight options', transitAfter: { mode: 'car', mins: 45 } },
         { id: 's1', time: '09:30', name: 'Big Buddha Phuket', category: 'culture', transitAfter: { mode: 'walk', mins: 13 } },
         { id: 's2', time: '13:00', name: 'Blue Elephant Restaurant', category: 'food', transitAfter: { mode: 'car', mins: 18 } },
         { id: 's3', time: null, name: 'Kata Beach Resort & Spa', category: 'stay' },
@@ -65,7 +66,7 @@ export const fmtINR = (n) => `₹${n.toLocaleString('en-IN')}`
 // Three core value props shown at checkout.
 export const CVPS = [
   { icon: 'shield', title: 'Price-match guarantee', desc: "Find this trip cheaper elsewhere and we'll match it." },
-  { icon: 'sparkle', title: 'Scapia promise', desc: 'Every stop planned by a local expert — or your money back.' },
+  { icon: 'sparkle', title: 'Scapia promise', desc: "If something goes wrong on your trip, we'll fix it." },
   { icon: 'phone', title: 'On-trip assistance', desc: '24×7 support from India for anything you need on the ground.' },
 ]
 
@@ -146,7 +147,10 @@ export const VIBES = [
   'Food & dining', 'Culture & history', 'Hidden gems', 'Nature & outdoors', 'Nightlife',
   'Shopping', 'Wellness', 'Adventure', 'Local life', 'Popular landmarks',
 ]
-export const VIBES_MAX = 3
+export const VIBES_MAX = 5
+
+// What kind of stays the traveller prefers (multi-select).
+export const STAY_TYPES = ['Hotels', 'Resorts', 'Homestays', 'Boutique stays', 'Hostels', 'Villas']
 
 // Total for the whole trip, per person. `short` keeps the pills compact.
 export const BUDGETS = [

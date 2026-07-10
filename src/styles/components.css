@@ -675,6 +675,17 @@
   gap: 9px; padding: 15px 20px; font: 600 15px/1.2 var(--font-body);
 }
 
+/* flight card in the itinerary */
+.stop--flight { background: var(--bg-secondary); }
+.stop--flight .stop__time { color: var(--brand-primary); }
+.flightopt {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+  font: 600 12.5px/1 var(--font-body); color: var(--brand-primary);
+  background: var(--bg-primary); border: 1px solid var(--primary-scapia-200);
+  border-radius: var(--r-pill); padding: 7px 11px;
+}
+.flightopt:active { background: var(--primary-scapia-000); }
+
 /* persistent highlight on a stop the expert has edited */
 .stop--edited {
   border-color: var(--primary-scapia-200);

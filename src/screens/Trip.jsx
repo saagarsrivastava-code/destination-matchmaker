@@ -104,6 +104,16 @@ export default function Trip() {
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: updatedId ? 0 : (di * 3 + si) * 0.05, duration: 0.25 }}
                 >
+                  {stop.flight ? (
+                    <div className="stop stop--flight" id={`stop-${stop.id}`} style={{ marginTop: si ? 8 : 0 }}>
+                      <span className="stop__time"><Icon name="plane" size={18} /></span>
+                      <div className="stop__body">
+                        <div className="stop__name">{stop.name}</div>
+                        <div className="t-lb-sm muted" style={{ marginTop: 3 }}>{stop.time} · {stop.sub}</div>
+                        <button className="flightopt">{stop.option} <Icon name="arrowRight" size={13} /></button>
+                      </div>
+                    </div>
+                  ) : (
                   <div className={`stop${stop.updated ? ' stop--edited' : ''}${updatedId === stop.id ? ' is-updated' : ''}`} id={`stop-${stop.id}`} style={{ marginTop: si ? 8 : 0 }}>
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.span
@@ -131,6 +141,7 @@ export default function Trip() {
                     </div>
                     <button className="stop__edit" aria-label={`Edit ${stop.name}`}><Icon name="pencil" size={16} /></button>
                   </div>
+                  )}
                   {stop.transitAfter && (
                     <div className="transit">
                       <Icon name={stop.transitAfter.mode === 'walk' ? 'walk' : stop.transitAfter.mode === 'metro' ? 'metro' : 'car'} size={15} />

@@ -15,6 +15,7 @@ export function FlowProvider({ children }) {
     pace: 50,                              // 0 more free time … 100 packed
     vibes: ['Food & dining', 'Hidden gems'],
     budget: 'Mid-range',
+    stays: ['Hotels'],
     food: 'No preference',
     notes: '',
   })
