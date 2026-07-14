@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Screen } from '../components/Chrome.jsx'
 import { Button, CategoryPill, Sheet } from '../components/ui.jsx'
@@ -38,7 +38,6 @@ const FREE_EDITS = 2
 
 export default function Trip() {
   const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
   const [chatOpen, setChatOpen] = useState(searchParams.get('tab') === 'chat')
   const [days, setDays] = useState(TRIP.days)
   const [updatedId, setUpdatedId] = useState(null)
@@ -77,18 +76,12 @@ export default function Trip() {
 
   return (
     <Screen>
-      {/* Header — trip identity on top, price + book CTA in a row below */}
-      <div className="trip-head trip-head--v2">
-        <div className="trip-head__top">
-          <h1 className="t-hd-large">{TRIP.title}</h1>
-          <div className="t-p-small muted" style={{ marginTop: 2 }}>{TRIP.durationDays} days · {TRIP.dateRange}</div>
-        </div>
-        <div className="trip-head__book">
-          <div>
-            <div className="t-lb-sm muted">Total / person</div>
-            <div className="t-hd-sm">{TRIP.price}</div>
-          </div>
-          <Button variant="dark" size="md" onClick={() => navigate('/checkout')}>Proceed to book</Button>
+      {/* Compact header — title left, price + book CTA right */}
+      <div className="trip-head trip-head--bar">
+        <h1 className="t-hd-large" style={{ flex: 1, minWidth: 0 }}>{TRIP.title}</h1>
+        <div className="trip-cta">
+          <span className="pricechip">{TRIP.price}</span>
+          <Button variant="dark" size="sm">Book this trip</Button>
         </div>
       </div>
 
@@ -104,17 +97,7 @@ export default function Trip() {
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: updatedId ? 0 : (di * 3 + si) * 0.05, duration: 0.25 }}
                 >
-                  {stop.flight ? (
-                    <div className="stop stop--flight" id={`stop-${stop.id}`} style={{ marginTop: si ? 8 : 0 }}>
-                      <span className="stop__time"><Icon name="plane" size={18} /></span>
-                      <div className="stop__body">
-                        <div className="stop__name">{stop.name}</div>
-                        <div className="t-lb-sm muted" style={{ marginTop: 3 }}>{stop.time} · {stop.sub}</div>
-                        <button className="flightopt">{stop.option} <Icon name="arrowRight" size={13} /></button>
-                      </div>
-                    </div>
-                  ) : (
-                  <div className={`stop${stop.updated ? ' stop--edited' : ''}${updatedId === stop.id ? ' is-updated' : ''}`} id={`stop-${stop.id}`} style={{ marginTop: si ? 8 : 0 }}>
+                  <div className={`stop${updatedId === stop.id ? ' is-updated' : ''}`} id={`stop-${stop.id}`} style={{ marginTop: si ? 8 : 0 }}>
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.span
                         key={stop.time || '—'} className="stop__time"
@@ -141,7 +124,6 @@ export default function Trip() {
                     </div>
                     <button className="stop__edit" aria-label={`Edit ${stop.name}`}><Icon name="pencil" size={16} /></button>
                   </div>
-                  )}
                   {stop.transitAfter && (
                     <div className="transit">
                       <Icon name={stop.transitAfter.mode === 'walk' ? 'walk' : stop.transitAfter.mode === 'metro' ? 'metro' : 'car'} size={15} />
@@ -155,16 +137,15 @@ export default function Trip() {
         ))}
       </div>
 
-      {/* Floating chat CTA */}
+      {/* Floating chat bubble */}
       {!chatOpen && (
         <motion.button
-          className="fab fab--ext"
-          initial={{ scale: 0.9, opacity: 0, y: 10 }} animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="fab" aria-label={`Chat with ${EXPERT.name}`}
+          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 400, damping: 26, delay: 0.2 }}
           onClick={() => setChatOpen(true)}
         >
-          <Icon name="chat" size={20} />
-          Customise your itinerary with {EXPERT.name.split(' ')[0]}
+          <Icon name="chat" size={26} />
         </motion.button>
       )}
 
@@ -186,20 +167,9 @@ function ChatSheet({ open, onClose, nextChange, onApplied, suggestion, blocked, 
   const [typing, setTyping] = useState(false)
   const [paying, setPaying] = useState(false)
   const scrollRef = useRef(null)
-  const inputRef = useRef(null)
 
   const sent = msgs.filter((m) => m.from === 'me').length
   const left = Math.max(0, FREE_MESSAGES - sent)
-
-  // Auto-grow the composer so the full message stays visible. Add the border
-  // delta (offset − client) so border-box sizing doesn't clip the last line.
-  useEffect(() => {
-    const el = inputRef.current
-    if (!el) return
-    el.style.height = 'auto'
-    const border = el.offsetHeight - el.clientHeight
-    el.style.height = `${Math.min(el.scrollHeight + border, 120)}px`
-  }, [text, open])
 
   // Pre-fill the composer with the upcoming scripted request whenever the
   // sheet opens empty — the tester just hits send (or types over it).
@@ -269,12 +239,10 @@ function ChatSheet({ open, onClose, nextChange, onApplied, suggestion, blocked, 
       ) : (
         <div className="chat-input">
           <button className="chat-mic" aria-label="Voice message"><Icon name="mic" size={19} /></button>
-          <textarea
-            ref={inputRef}
-            rows={1}
+          <input
             value={text}
             onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+            onKeyDown={(e) => { if (e.key === 'Enter') send() }}
             placeholder={left === 0 ? 'You’re out of free messages' : `Message ${EXPERT.name.split(' ')[0]}…`}
             disabled={left === 0}
           />

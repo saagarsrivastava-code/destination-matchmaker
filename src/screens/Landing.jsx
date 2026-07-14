@@ -40,7 +40,7 @@ export default function Landing() {
 
         {/* Hero — provided artwork: chat mockup over Linh's photo */}
         <motion.img
-          src={`${import.meta.env.BASE_URL}front_page.png`}
+          src="/front_page.png"
           alt="Chat with Linh, your local destination expert"
           style={{ width: '100%', height: 'auto', display: 'block' }}
           initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
@@ -49,6 +49,13 @@ export default function Landing() {
 
         <div style={{ height: 24 }} />
         <Button full onClick={() => navigate('/ideas')}>Start planning</Button>
+        <button
+          className="t-p-small muted"
+          style={{ marginTop: 12, textDecoration: 'underline' }}
+          onClick={() => navigate('/c3')}
+        >
+          Try concept 3 — swipe to plan →
+        </button>
         <div style={{ height: 8 }} />
       </div>
     </Screen>

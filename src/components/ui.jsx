@@ -1,43 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import Icon from './Icon.jsx'
-import { CATEGORIES, EXPERT, onAvatarError } from '../data/trip.js'
-
-/* ── Avatar with flag badge ───────────────────────────────────── */
-export function ExpertAvatar({ size = 96 }) {
-  return (
-    <span className="avwrap" style={{ width: size, height: size }}>
-      <img
-        className="expert-card__av" style={{ width: size, height: size }}
-        src={EXPERT.avatar} onError={onAvatarError} alt={EXPERT.name}
-      />
-      <span className="avwrap__flag">{EXPERT.flag}</span>
-    </span>
-  )
-}
-
-/* ── Rich local-expert card — accomplishments + social proof ──── */
-export function ExpertCard() {
-  return (
-    <div className="excard">
-      <div className="excard__head">
-        <ExpertAvatar size={54} />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="t-lb-sm muted">Your local expert</div>
-          <div className="t-hd-sm">{EXPERT.name}</div>
-          <span className="expert-card__verify"><Icon name="check" size={12} />{EXPERT.title}</span>
-        </div>
-      </div>
-      <div className="excard__stats">
-        {EXPERT.stats.map((s) => (
-          <div key={s.label} className="excard__stat">
-            <div className="excard__statval">{s.value}</div>
-            <div className="excard__statlbl">{s.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+import { CATEGORIES } from '../data/trip.js'
 
 /* ── Button ───────────────────────────────────────────────────── */
 export function Button({ children, variant = 'primary', full, onClick, disabled, icon, size = 'lg' }) {

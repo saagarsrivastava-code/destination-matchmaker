@@ -19,5 +19,5 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# local claude config
+# local claude settings
 .claude/

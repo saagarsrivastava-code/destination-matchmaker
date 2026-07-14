@@ -38,9 +38,16 @@ const PATHS = {
   screenshot: <><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2" /><circle cx="12" cy="12" r="2.6" /></>,
   bolt: <path d="M13 3L5.5 13.5H11L10.5 21 18 10.5h-5.5z" />,
   lock: <><rect x="5.5" y="11" width="13" height="9" rx="2.5" /><path d="M8.5 11V8a3.5 3.5 0 017 0v3" /></>,
-  bell: <><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" /><path d="M10 20a2 2 0 004 0" /></>,
-  shield: <><path d="M12 3l7 3v5c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>,
-  plane: <path d="M21 15.5l-8-2.5V5.5a1.5 1.5 0 00-3 0V13l-8 2.5V17l8-1.5V20l-2 1.2V22l3.5-1 3.5 1v-.8L13 20v-4.5l8 1.5z" />,
+  calendar: <><rect x="4" y="6" width="16" height="14" rx="2.5" /><path d="M4 10.5h16M8.5 4v4M15.5 4v4" /></>,
+  food: <><path d="M4.5 3v5a3 3 0 006 0V3M7.5 3v18" /><path d="M19.5 13V3.5A4.5 4.5 0 0015.5 8v5h4zM19.5 13v8" /></>,
+  moon: <path d="M20 13.5A8 8 0 1110.5 4a6.5 6.5 0 009.5 9.5z" />,
+  bag: <><path d="M6 8h12l-1.2 12H7.2z" /><path d="M9 8V6.5a3 3 0 016 0V8" /></>,
+  leaf: <><path d="M5 19C5 9.5 12 4.5 20 4.5c0 8-5 14.5-15 14.5z" /><path d="M5 19c2-5 6-9 10-11" /></>,
+  gem: <><path d="M7.5 4h9l4 5.5L12 20.5 3.5 9.5z" /><path d="M3.5 9.5h17M12 20.5L8.5 9.5 12 4l3.5 5.5z" /></>,
+  mountain: <><path d="M3 19l6.5-11.5 4 6.5 2.5-4L21 19z" /><circle cx="17" cy="6" r="1.6" /></>,
+  museum: <><path d="M4 9l8-5.5L20 9" /><path d="M5.5 9v8M10 9v8M14 9v8M18.5 9v8M3.5 20.5h17" /></>,
+  lotus: <><path d="M12 20c-2.4-1.2-4-3.6-4-6 0-2.2 1.3-4.3 4-6.2 2.7 1.9 4 4 4 6.2 0 2.4-1.6 4.8-4 6z" /><path d="M12 20c-3.8.6-6.8-1.2-8-3.8 1.9-.9 3.9-.9 5.4-.1M12 20c3.8.6 6.8-1.2 8-3.8-1.9-.9-3.9-.9-5.4-.1" /></>,
+  bookmark: <path d="M6 4h12v16l-6-4-6 4z" />,
 }
 
 export default function Icon({ name, size = 22, stroke = 1.8, className, style }) {

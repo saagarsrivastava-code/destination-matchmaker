@@ -18,13 +18,11 @@ export const TRIP = {
   durationDays: 5,
   dateRange: 'Mon 14 – Fri 18 Dec',
   price: '₹50,000',
-  origin: 'Bengaluru',
   days: [
     {
       label: 'Day 1 — Phuket',
       date: 'Mon 14 Dec',
       stops: [
-        { id: 'fl1', flight: true, time: '06:15', name: 'Bengaluru → Phuket', sub: 'AirAsia · 1 stop · 7h 30m', option: '3 flight options', transitAfter: { mode: 'car', mins: 45 } },
         { id: 's1', time: '09:30', name: 'Big Buddha Phuket', category: 'culture', transitAfter: { mode: 'walk', mins: 13 } },
         { id: 's2', time: '13:00', name: 'Blue Elephant Restaurant', category: 'food', transitAfter: { mode: 'car', mins: 18 } },
         { id: 's3', time: null, name: 'Kata Beach Resort & Spa', category: 'stay' },
@@ -50,55 +48,18 @@ export const TRIP = {
   ],
 }
 
-// ── Checkout — per-person cost breakdown (items + taxes = ₹50,000) ──
-export const CHECKOUT = {
-  items: [
-    { label: 'Flights · return', sub: 'Bengaluru ⇄ Phuket', amount: 22000 },
-    { label: 'Stays · 4 nights', sub: 'Kata Beach Resort & Spa', amount: 13500 },
-    { label: 'Activities & entries', sub: '6 experiences', amount: 6000 },
-    { label: 'Local transfers', sub: 'Airport + intercity', amount: 3000 },
-    { label: 'Expert planning fee', sub: 'Created by Linh', amount: 499 },
-  ],
-  taxes: 5001,
-}
-export const fmtINR = (n) => `₹${n.toLocaleString('en-IN')}`
-
-// Three core value props shown at checkout.
-export const CVPS = [
-  { icon: 'shield', title: 'Price-match guarantee', desc: "Find this trip cheaper elsewhere and we'll match it." },
-  { icon: 'sparkle', title: 'Scapia promise', desc: "If something goes wrong on your trip, we'll fix it." },
-  { icon: 'phone', title: 'On-trip assistance', desc: '24×7 support from India for anything you need on the ground.' },
-]
-
-// Asset base — respects Vite's configured base so paths work on the
-// GitHub Pages project subpath (…/itinerary-scorer-app/) and in local dev.
-export const ASSET_BASE = import.meta.env.BASE_URL
-
 // Local travel experts who vet and edit the itinerary.
 // Linh's photo lives at public/linh.png; stock stand-in only if it goes missing.
 export const EXPERT = {
   name: 'Linh Fa',
-  title: 'Thai travel expert, living in Bangkok',
-  flag: '🇹🇭',
-  avatar: `${ASSET_BASE}linh.png`,
-  // Accomplishments + social proof
-  rating: 4.9,
-  reviews: 380,
-  itineraries: 1240,
-  years: 5,
-  langs: 'English · Thai · Mandarin',
-  blurb: 'Born in Chiang Mai, based in Bangkok. I plan trips that skip the tourist traps and get you into the Thailand locals love.',
-  stats: [
-    { value: '4.9★', label: '380 reviews' },
-    { value: '1,240+', label: 'itineraries created' },
-    { value: '5 yrs', label: 'local expertise' },
-  ],
+  title: 'Thai traveller with 5 YOE',
+  avatar: '/linh.png',
 }
 export const EXPERT_FALLBACK = IMG('1573496359142-b8d87734a5a2', 200) + '&crop=faces'
 export const EXPERT_FALLBACK_LARGE = IMG('1573496359142-b8d87734a5a2', 600) + '&crop=faces'
 export function onAvatarError(e) {
   const img = e.currentTarget
-  if (img.src.endsWith('linh.png')) img.src = img.dataset.fallback || EXPERT_FALLBACK
+  if (img.src.endsWith('/linh.png')) img.src = img.dataset.fallback || EXPERT_FALLBACK
 }
 export const EXPERTS = [
   EXPERT,
@@ -136,21 +97,16 @@ export const PARTY = ['Solo', 'Partner', 'Friends', 'Family (kids)', 'With my pa
 
 export const DURATIONS = ['2–3 days', '4–6 days', '1–2 weeks', '2+ weeks']
 
-export const MONTH_FLEXIBLE = "I'm flexible"
 export const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
-  MONTH_FLEXIBLE,
 ]
 
 export const VIBES = [
   'Food & dining', 'Culture & history', 'Hidden gems', 'Nature & outdoors', 'Nightlife',
   'Shopping', 'Wellness', 'Adventure', 'Local life', 'Popular landmarks',
 ]
-export const VIBES_MAX = 5
-
-// What kind of stays the traveller prefers (multi-select).
-export const STAY_TYPES = ['Hotels', 'Resorts', 'Homestays', 'Boutique stays', 'Hostels', 'Villas']
+export const VIBES_MAX = 3
 
 // Total for the whole trip, per person. `short` keeps the pills compact.
 export const BUDGETS = [
@@ -178,8 +134,7 @@ export function buildPlanningTasks({ budget, pace, vibes, month, food }) {
   const tasks = []
   const b = BUDGETS.find((x) => x.key === budget) || BUDGETS[1]
   tasks.push(`Sorting through hotels for ${b.label.toLowerCase()} budget`)
-  if (month === MONTH_FLEXIBLE) tasks.push('Finding the cheapest weeks to travel')
-  else if (month) tasks.push(`Checking prices and weather for ${month}`)
+  if (month) tasks.push(`Checking prices and weather for ${month}`)
   tasks.push(pace <= 50 ? 'Crafting a route which is not rushed' : 'Packing your days without wasting time in transit')
   if (food && food !== 'No preference') tasks.push(`Making sure every stop has solid ${food.toLowerCase()} options`)
   ;(vibes.length ? vibes : ['Popular landmarks']).slice(0, 1).forEach((v) => {

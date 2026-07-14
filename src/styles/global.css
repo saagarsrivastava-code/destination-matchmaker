@@ -28,6 +28,9 @@ ul { list-style: none; }
   overflow: hidden;
 }
 
+/* wraps the active route; fills the app so absolute screens anchor to it */
+.screen-stack { position: absolute; inset: 0; }
+
 /* scrollable body of a screen */
 .screen-body {
   flex: 1;

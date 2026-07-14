@@ -10,8 +10,11 @@ export function Screen({ children, className = '' }) {
       className={`screen ${className}`}
       initial={{ opacity: 0, x: 18 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -18 }}
-      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      // No `exit`: the screen is absolute + opaque, so the entering screen
+      // covers it and it can unmount instantly. An exit animation here piles
+      // up screens that framer never marks safe-to-remove (esp. after the
+      // drag-heavy swipe decks), which is what wedged navigation before.
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       style={{
         position: 'absolute',
         inset: 0,
