@@ -27,14 +27,8 @@ export default function App() {
           left screens stuck mid-exit (black screen after the cards). */}
       <div className="screen-stack" key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<Landing />} />
-          <Route path="/ideas" element={<Ideas />} />
-          <Route path="/questions" element={<Questions />} />
-          <Route path="/planning" element={<Planning />} />
-          <Route path="/ready" element={<ItineraryReady />} />
-          <Route path="/trip" element={<Trip />} />
-
-          {/* Concept 3 — swipe-first flow */}
+          {/* Destination Matchmaker is the default experience */}
+          <Route path="/" element={<C3Landing />} />
           <Route path="/c3" element={<C3Landing />} />
           <Route path="/c3/basics" element={<C3Basics />} />
           <Route path="/c3/vibes" element={<C3Vibe />} />
@@ -44,7 +38,15 @@ export default function App() {
           <Route path="/c3/shortlist" element={<C3Shortlist />} />
           <Route path="/c3/trip/:dest/:id" element={<C3Trip />} />
 
-          <Route path="*" element={<Landing />} />
+          {/* Earlier expert-planned concept, kept for reference */}
+          <Route path="/expert" element={<Landing />} />
+          <Route path="/ideas" element={<Ideas />} />
+          <Route path="/questions" element={<Questions />} />
+          <Route path="/planning" element={<Planning />} />
+          <Route path="/ready" element={<ItineraryReady />} />
+          <Route path="/trip" element={<Trip />} />
+
+          <Route path="*" element={<C3Landing />} />
         </Routes>
       </div>
     </div>

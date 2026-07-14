@@ -53,7 +53,7 @@ export const TRIP = {
 export const EXPERT = {
   name: 'Linh Fa',
   title: 'Thai traveller with 5 YOE',
-  avatar: '/linh.png',
+  avatar: `${import.meta.env.BASE_URL}linh.png`,
 }
 export const EXPERT_FALLBACK = IMG('1573496359142-b8d87734a5a2', 200) + '&crop=faces'
 export const EXPERT_FALLBACK_LARGE = IMG('1573496359142-b8d87734a5a2', 600) + '&crop=faces'
