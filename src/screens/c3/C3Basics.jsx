@@ -4,14 +4,24 @@ import { Screen, Footer } from '../../components/Chrome.jsx'
 import { Button, Stepper } from '../../components/ui.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useC3 } from '../../state/C3Context.jsx'
-import { C3_MONTHS, C3_PARTY, BUDGET_MIN, BUDGET_MAX, BUDGET_STEP, budgetTier, inr } from '../../data/c3.js'
+import { C3_MONTHS, FLEXIBLE_MONTH, C3_PARTY, BUDGET_MIN, BUDGET_MAX, BUDGET_STEP, budgetTier, inr } from '../../data/c3.js'
 
 export default function C3Basics() {
   const navigate = useNavigate()
-  const { basics, setBasic, toggleMonth } = useC3()
+  const { basics, setBasic } = useC3()
   const { months, party, budget } = basics
 
   const ready = months.length > 0 && !!party
+
+  // "I'm flexible" is mutually exclusive with specific months.
+  function onMonth(m) {
+    if (m === FLEXIBLE_MONTH) {
+      setBasic('months', months.includes(FLEXIBLE_MONTH) ? [] : [FLEXIBLE_MONTH])
+      return
+    }
+    const base = months.filter((x) => x !== FLEXIBLE_MONTH)
+    setBasic('months', base.includes(m) ? base.filter((x) => x !== m) : [...base, m])
+  }
 
   return (
     <Screen>
@@ -29,10 +39,16 @@ export default function C3Basics() {
           <Section title="When could you travel?" first>
             <div className="chips" style={{ marginTop: 12 }}>
               {C3_MONTHS.map((m) => (
-                <button key={m} className={`chip${months.includes(m) ? ' is-sel' : ''}`} onClick={() => toggleMonth(m)}>
+                <button key={m} className={`chip${months.includes(m) ? ' is-sel' : ''}`} onClick={() => onMonth(m)}>
                   {m}{months.includes(m) ? ' ✓' : ''}
                 </button>
               ))}
+              <button
+                className={`chip${months.includes(FLEXIBLE_MONTH) ? ' is-sel' : ''}`}
+                onClick={() => onMonth(FLEXIBLE_MONTH)}
+              >
+                {FLEXIBLE_MONTH}{months.includes(FLEXIBLE_MONTH) ? ' ✓' : ''}
+              </button>
             </div>
           </Section>
 

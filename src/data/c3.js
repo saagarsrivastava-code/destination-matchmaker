@@ -7,8 +7,14 @@ export const C3_MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ]
+export const FLEXIBLE_MONTH = "I'm flexible"
 
-export const C3_PARTY = ['Solo', 'Partner', 'Friends', 'Family (kids)', 'Family (teens)', 'Parents', 'Group (6+)']
+export function monthsLabel(months) {
+  if (!months.length || months.includes(FLEXIBLE_MONTH)) return 'flexible dates'
+  return months.join(', ')
+}
+
+export const C3_PARTY = ['Solo', 'Partner', 'Friends', 'Family (kids)', 'Group (6+)']
 
 // Total trip budget per person, ₹. Two-grabber range slider.
 export const BUDGET_MIN = 20000
@@ -42,7 +48,7 @@ export const VIBES_MAX = 5
 export const VIBE_LABEL = Object.fromEntries(VIBE_OPTIONS.map((o) => [o.key, o.label]))
 
 export const FOOD_OPTIONS = ['Vegetarian', 'Non-vegetarian', 'Vegan', 'All cuisines']
-export const STAY_OPTIONS = ['Hotels', 'Resorts', 'Homestays', 'Boutique stays', 'Hostels', 'Villas']
+export const STAY_OPTIONS = ['3✭ Hotels', '4✭ Hotels', '5✭ Hotels', 'Boutique stays', 'Homestays', 'Hostels']
 export const OFFBEAT_OPTIONS = ['More offbeat', 'More popular', 'Mix of both']
 export const TRANSPORT_OPTIONS = ['Public transport', 'Private transfer']
 

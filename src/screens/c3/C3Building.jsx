@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Screen } from '../../components/Chrome.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useC3 } from '../../state/C3Context.jsx'
-import { VIBE_LABEL, inr } from '../../data/c3.js'
+import { VIBE_LABEL, inr, monthsLabel } from '../../data/c3.js'
 
 export default function C3Building() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function C3Building() {
       ? `Matching ${prefs.vibes.slice(0, 2).map((k) => VIBE_LABEL[k].toLowerCase()).join(', ')}…`
       : 'Reading your preferences…',
     `Fitting plans to your ${inr(basics.budget[0])}–${inr(basics.budget[1])} budget…`,
-    `Checking ${basics.months.join(', ')} weather across destinations…`,
+    `Checking weather for ${monthsLabel(basics.months)}…`,
     'Building itineraries you can book…',
   ]
 

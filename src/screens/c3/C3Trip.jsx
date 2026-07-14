@@ -5,7 +5,7 @@ import { Screen } from '../../components/Chrome.jsx'
 import { Button, CategoryPill, Sheet } from '../../components/ui.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useC3 } from '../../state/C3Context.jsx'
-import { getDestination, getItinerary, inr, traitPills, costTiles } from '../../data/c3.js'
+import { getDestination, getItinerary, inr, traitPills, costTiles, monthsLabel } from '../../data/c3.js'
 
 export default function C3Trip() {
   const navigate = useNavigate()
@@ -136,7 +136,7 @@ export default function C3Trip() {
             </motion.span>
             <div className="t-hd-med">Trip booked 🎉</div>
             <p className="t-p-small muted" style={{ maxWidth: 280 }}>
-              Your {destination.name} plan is locked in for {basics.months.join(' / ')}. Tickets and vouchers land on your scapia app.
+              Your {destination.name} plan is locked in for {monthsLabel(basics.months)}. Tickets and vouchers land on your scapia app.
             </p>
             <Button variant="soft" onClick={() => { setBookOpen(false); navigate('/c3') }}>Back to start</Button>
           </div>

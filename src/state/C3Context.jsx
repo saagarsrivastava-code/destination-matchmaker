@@ -24,7 +24,7 @@ export function C3Provider({ children }) {
     pace: 50,                       // 0 = more free time … 100 = more activities
     vibes: ['food', 'hidden'],      // up to VIBES_MAX trait keys
     food: 'All cuisines',
-    stays: ['Hotels'],              // multi-select
+    stays: ['4✭ Hotels'],           // multi-select
     offbeat: 'Mix of both',
     transport: 'Private transfer',
   })
