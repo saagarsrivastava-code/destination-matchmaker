@@ -68,10 +68,7 @@ export default function C3Landing() {
           ))}
         </div>
 
-        <div className="t-lb-sm muted center" style={{ marginTop: 16 }}>
-          Matched to your vibe — with the reasons why.
-        </div>
-        <div style={{ height: 16 }} />
+        <div style={{ height: 28 }} />
         <Button full onClick={() => navigate('/c3/q/1')}>Find my destination</Button>
       </div>
     </Screen>
