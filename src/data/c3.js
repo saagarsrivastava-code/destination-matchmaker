@@ -386,6 +386,11 @@ export function matchTags(country, qual) {
   return t
 }
 
+// Short vibe teaser for the landing cards (no user input yet).
+export function countryTeaser(country) {
+  return country.vibes.slice(0, 2).map((v) => `${VIBE_EMOJI[v]} ${VIBE_SHORT[v]}`)
+}
+
 export function rankedCountries(qual) {
   return [...COUNTRIES]
     .map((c) => ({ country: c, ...matchCountry(c, qual) }))

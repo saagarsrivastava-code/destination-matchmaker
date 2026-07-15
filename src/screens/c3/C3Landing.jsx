@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Screen } from '../../components/Chrome.jsx'
 import { Button } from '../../components/ui.jsx'
 import Icon from '../../components/Icon.jsx'
-import { COUNTRIES } from '../../data/c3.js'
+import { COUNTRIES, countryTeaser } from '../../data/c3.js'
 
 // Fanned destination photos teasing the recommendations ahead.
 const FAN = [
@@ -57,7 +57,13 @@ export default function C3Landing() {
               transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
             >
               <img src={c.hero} alt="" draggable="false" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              <span className="fan__label">{c.name}</span>
+              <div className="fan__scrim" />
+              <div className="fan__cap">
+                <span className="fan__label">{c.name}</span>
+                <div className="fan__teaser">
+                  {countryTeaser(c).map((t) => <span key={t}>{t}</span>)}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>

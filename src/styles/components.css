@@ -910,9 +910,16 @@
   display: flex; align-items: flex-end;
 }
 .fan__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fan__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,18,35,0.78), transparent 55%); }
+.fan__cap { position: relative; z-index: 1; width: 100%; padding: 12px; }
 .fan__label {
-  position: relative; z-index: 1; margin: 12px; color: #fff;
-  font: 700 16px/1 var(--font-body); text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  color: #fff; font: 700 16px/1 var(--font-body); text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+.fan__teaser { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.fan__teaser span {
+  font: 600 9.5px/1 var(--font-body); color: #fff;
+  background: rgba(255,255,255,0.22); border-radius: var(--r-pill); padding: 4px 6px;
+  backdrop-filter: blur(3px); white-space: nowrap;
 }
 
 /* countries grid */

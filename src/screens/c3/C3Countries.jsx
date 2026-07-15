@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'framer-motion'
 import { Screen, AppBar } from '../../components/Chrome.jsx'
 import Icon from '../../components/Icon.jsx'
 import { useC3 } from '../../state/C3Context.jsx'
@@ -69,34 +69,39 @@ export default function C3Countries() {
 
 /* ── Full-page country card; swipe tucks it to the back of the deck ── */
 const TopCard = forwardRef(function TopCard({ r, bestKey, onCycle, onOpen }, ref) {
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
+  // Mount at the same transform the card had while sitting at the back of the
+  // stack (pos 1 lean), then animate forward — so it glides in, no jump.
+  const x = useMotionValue(16)
+  const y = useMotionValue(7)
   const scale = useMotionValue(0.95)
-  const opacity = useMotionValue(0.85)
-  const rotate = useTransform(x, [-260, 260], [-10, 10])
+  const opacity = useMotionValue(0.9)
+  const rotate = useMotionValue(4.5)
   const [behind, setBehind] = useState(false)
   const leaving = useRef(false)
 
-  // rise into place as the new top card
   useEffect(() => {
-    const a = animate(scale, 1, { duration: 0.26, ease: [0.22, 1, 0.36, 1] })
-    const b = animate(opacity, 1, { duration: 0.26 })
-    return () => { a.stop(); b.stop() }
+    const o = { duration: 0.36, ease: [0.22, 1, 0.36, 1] }
+    const a = [animate(x, 0, o), animate(y, 0, o), animate(scale, 1, o), animate(rotate, 0, o), animate(opacity, 1, { duration: 0.3 })]
+    return () => a.forEach((v) => v.stop())
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function fling(dir) {
     if (leaving.current) return
     leaving.current = true
-    setBehind(true) // drop below the stack immediately so it reads as going under
+    setBehind(true) // drop below the stack so it reads as going under
     let done = false
     const finish = () => { if (done) return; done = true; onCycle() }
-    animate(x, dir * 40, { duration: 0.36, ease: [0.4, 0, 0.2, 1] })
-    animate(scale, 0.78, { duration: 0.36, ease: [0.4, 0, 0.2, 1] })
-    animate(opacity, 0.3, { duration: 0.36 })
-    animate(y, 34, { duration: 0.36, onComplete: finish })
+    const o = { duration: 0.36, ease: [0.4, 0, 0.2, 1] }
+    animate(x, dir * 40, o)
+    animate(rotate, dir * 7, o)
+    animate(scale, 0.78, o)
+    animate(opacity, 0.3, o)
+    animate(y, 34, { ...o, onComplete: finish })
     setTimeout(finish, 560)
   }
   useImperativeHandle(ref, () => ({ fling }))
+
+  function onDrag(_, info) { rotate.set(info.offset.x / 24) }
 
   function onDragEnd(_, info) {
     if (Math.abs(info.offset.x) > 90 || (Math.abs(info.offset.x) > 30 && Math.abs(info.velocity.x) > 600)) {
@@ -105,6 +110,7 @@ const TopCard = forwardRef(function TopCard({ r, bestKey, onCycle, onOpen }, ref
       if (!leaving.current) onOpen()
     } else {
       animate(x, 0, { type: 'spring', stiffness: 420, damping: 32 })
+      animate(rotate, 0, { type: 'spring', stiffness: 420, damping: 32 })
     }
   }
 
@@ -112,7 +118,7 @@ const TopCard = forwardRef(function TopCard({ r, bestKey, onCycle, onOpen }, ref
     <motion.div
       className="cdeck-card" style={{ x, y, scale, opacity, rotate, zIndex: behind ? 1 : 20, cursor: 'pointer' }}
       drag={behind ? false : 'x'} dragElastic={0.9} dragConstraints={{ left: 0, right: 0 }}
-      onDragEnd={onDragEnd} onTap={(_, info) => { if (!leaving.current && Math.abs(info.offset?.x || 0) < 8) onOpen() }}
+      onDrag={onDrag} onDragEnd={onDragEnd} onTap={(_, info) => { if (!leaving.current && Math.abs(info.offset?.x || 0) < 8) onOpen() }}
     >
       <CountryFace r={r} top bestKey={bestKey} />
     </motion.div>
