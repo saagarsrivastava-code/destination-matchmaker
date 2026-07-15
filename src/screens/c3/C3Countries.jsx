@@ -9,7 +9,7 @@ import { rankedCountries, matchTags, compareMatrix, weatherInsight } from '../..
 export default function C3Countries() {
   const navigate = useNavigate()
   const { qual, setCountryKey } = useC3()
-  const ranked = useMemo(() => rankedCountries(qual).slice(0, 4), [qual])
+  const ranked = useMemo(() => rankedCountries(qual).slice(0, 3), [qual])
   const byKey = useMemo(() => Object.fromEntries(ranked.map((r) => [r.country.key, r])), [ranked])
   const bestKey = ranked[0]?.country.key
 
