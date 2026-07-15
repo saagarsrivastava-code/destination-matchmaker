@@ -55,9 +55,9 @@ export default function C3Countries() {
             })}
           </div>
           <div className="cdeck-hint">
-            <button className="cdeck-nav" onClick={() => topRef.current?.fling(-1)} aria-label="Send to back"><Icon name="back" size={18} /></button>
+            <button className="cdeck-nav" onClick={() => topRef.current?.fling(-1)} aria-label="Skip left"><Icon name="arrowLeft" size={18} /></button>
             <span>Swipe or tap a card to explore</span>
-            <button className="cdeck-nav" onClick={() => topRef.current?.fling(1)} aria-label="Send to back"><Icon name="arrowRight" size={18} /></button>
+            <button className="cdeck-nav" onClick={() => topRef.current?.fling(1)} aria-label="Skip right"><Icon name="arrowRight" size={18} /></button>
           </div>
         </div>
       ) : (

@@ -2,6 +2,8 @@
 const PATHS = {
   back: <path d="M15 5l-7 7 7 7" />,
   arrowRight: <path d="M5 12h14M13 6l6 6-6 6" />,
+  arrowLeft: <path d="M19 12H5M11 6l-6 6 6 6" />,
+  shuffle: <><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" /></>,
   arrowDown: <path d="M12 5v14M6 13l6 6 6-6" />,
   share: <><circle cx="6" cy="12" r="2.4" /><circle cx="17" cy="6" r="2.4" /><circle cx="17" cy="18" r="2.4" /><path d="M8.1 11l6.8-3.6M8.1 13l6.8 3.6" /></>,
   plus: <path d="M12 5v14M5 12h14" />,
