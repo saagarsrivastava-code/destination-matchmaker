@@ -366,6 +366,30 @@ export function matchCountry(country, qual) {
   return { score, reasons }
 }
 
+// Compact "why it matched" tags for the grid cards. First is the strongest.
+const VIBE_EMOJI = { relax: '🌴', adventure: '🧗', culture: '🛕', food: '🍜', nature: '🦁', wellness: '🧘' }
+const VIBE_SHORT = { relax: 'Relax', adventure: 'Adventure', culture: 'Culture', food: 'Food & drink', nature: 'Wildlife', wellness: 'Wellness' }
+const WEATHER_EMOJI = { beach: '☀️', mountains: '⛰️', mild: '🌤️' }
+const WEATHER_SHORT = { beach: 'Beach', mountains: 'Mountains', mild: 'Mild weather' }
+const REASON_EMOJI = {
+  Honeymoon: '💛', Vacation: '🏖️', Staycation: '🛋️', Workation: '💻',
+  'Bachelor / ette': '🎉', 'Solo trip': '🎒', 'Birthday / Anniversary': '🎂',
+}
+
+export function matchTags(country, qual) {
+  const t = []
+  if (qual.vibe && country.vibes.includes(qual.vibe)) t.push(`${VIBE_EMOJI[qual.vibe]} ${VIBE_SHORT[qual.vibe]}`)
+  if (qual.weather && qual.weather !== 'any' && country.weather.includes(qual.weather)) t.push(`${WEATHER_EMOJI[qual.weather]} ${WEATHER_SHORT[qual.weather]}`)
+  if (qual.months && !qual.months.includes(FLEXIBLE_MONTH)) {
+    const overlap = country.bestMonths.filter((m) => qual.months.includes(m))
+    if (overlap.length) t.push(`📅 Great in ${overlap[0]}`)
+  }
+  if (qual.reason && country.reasons?.includes(qual.reason)) t.push(`${REASON_EMOJI[qual.reason] || '✨'} ${qual.reason}`)
+  if (budgetBandOf(qual.budget || [50000, 150000]) === country.budgetBand) t.push('💰 In budget')
+  if (qual.who && country.goodFor?.includes(qual.who)) t.push(`👥 ${qual.who}`)
+  return t
+}
+
 export function rankedCountries(qual) {
   return [...COUNTRIES]
     .map((c) => ({ country: c, ...matchCountry(c, qual) }))
