@@ -3,13 +3,12 @@ import { motion } from 'framer-motion'
 import { Screen } from '../../components/Chrome.jsx'
 import { Button } from '../../components/ui.jsx'
 import Icon from '../../components/Icon.jsx'
-import { COUNTRIES } from '../../data/c3.js'
 
-// Fanned country photos teasing the recommendations ahead.
+// Fanned vibe cards teasing the questions ahead.
 const FAN = [
-  { c: COUNTRIES[0], rot: -9, x: -62, delay: 0.15 },
-  { c: COUNTRIES[4], rot: 8, x: 62, delay: 0.25 },
-  { c: COUNTRIES[1], rot: -1, x: 0, delay: 0.35 },
+  { icon: 'leaf', title: 'Nature',        bg: 'linear-gradient(150deg, #EAF7E6, #C9EBBE)', tint: '#38801F', rot: -9, x: -58, delay: 0.15 },
+  { icon: 'food', title: 'Food & dining', bg: 'linear-gradient(150deg, #FFEAE0, #FECBB3)', tint: '#C63800', rot: 7,  x: 58,  delay: 0.25 },
+  { icon: 'gem',  title: 'Hidden gems',   bg: 'linear-gradient(150deg, #E0EFFF, #B5D5FA)', tint: '#135EB4', rot: -1, x: 0,   delay: 0.35 },
 ]
 
 export default function C3Landing() {
@@ -39,31 +38,31 @@ export default function C3Landing() {
             className="t-p-med muted"
             style={{ marginTop: 12, maxWidth: 300, marginLeft: 'auto', marginRight: 'auto' }}
           >
-            Tell us your vibe — we'll match you to the right country, then build a plan you can book.
+            Answer a few quick questions — we'll turn them into final plans you can book.
           </motion.p>
         </motion.div>
 
         <div className="spacer" style={{ minHeight: 16 }} />
 
-        {/* fanned country teaser */}
+        {/* fanned vibe-card teaser */}
         <div className="fan">
-          {FAN.map(({ c, rot, x, delay }) => (
+          {FAN.map(({ icon, title, bg, tint, rot, x, delay }) => (
             <motion.div
-              key={c.key}
-              className="fan__photo"
-              style={{ background: c.grad }}
+              key={title}
+              className="fan__card"
+              style={{ background: bg, color: tint }}
               initial={{ opacity: 0, y: 26, rotate: 0, x: 0 }}
               animate={{ opacity: 1, y: 0, rotate: rot, x }}
               transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img src={c.hero} alt="" draggable="false" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              <span className="fan__label">{c.name}</span>
+              <Icon name={icon} size={30} stroke={1.6} />
+              <span>{title}</span>
             </motion.div>
           ))}
         </div>
 
         <div style={{ height: 28 }} />
-        <Button full onClick={() => navigate('/c3/q/1')}>Find my destination</Button>
+        <Button full onClick={() => navigate('/c3/q/1')}>Find my trip</Button>
       </div>
     </Screen>
   )
