@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { Screen, AppBar } from '../../components/Chrome.jsx'
@@ -6,13 +6,12 @@ import Icon from '../../components/Icon.jsx'
 import { useC3 } from '../../state/C3Context.jsx'
 import { rankedCountries, matchTags, compareMatrix } from '../../data/c3.js'
 
-const FLY_X = 640
-
 export default function C3Countries() {
   const navigate = useNavigate()
   const { qual, setCountryKey } = useC3()
   const ranked = useMemo(() => rankedCountries(qual).slice(0, 4), [qual])
   const byKey = useMemo(() => Object.fromEntries(ranked.map((r) => [r.country.key, r])), [ranked])
+  const bestKey = ranked[0]?.country.key
 
   const [order, setOrder] = useState(ranked.map((r) => r.country.key))
   const [view, setView] = useState('cards')
@@ -36,24 +35,29 @@ export default function C3Countries() {
       />
 
       {view === 'cards' ? (
-        <div className="screen-body" style={{ display: 'flex', flexDirection: 'column', padding: '6px 20px calc(16px + env(safe-area-inset-bottom))' }}>
+        <div className="screen-body" style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px calc(16px + env(safe-area-inset-bottom))' }}>
           <div className="cdeck">
             {order.slice(0, 3).map((key) => {
               const pos = order.indexOf(key)
               if (pos === 0) {
-                return <TopCard key={key} ref={topRef} r={byKey[key]} onCycle={cycle} onOpen={() => open(key)} />
+                return <TopCard key={key} ref={topRef} r={byKey[key]} bestKey={bestKey} onCycle={cycle} onOpen={() => open(key)} />
               }
+              const lean = pos === 1 ? { rotate: 4.5, x: 16 } : { rotate: -5.5, x: -18 }
               return (
-                <motion.div key={key} className="cdeck-card" style={{ zIndex: 10 - pos }} initial={false} animate={{ scale: 1 - pos * 0.04, y: pos * 16 }}>
-                  <CountryFace r={byKey[key]} />
+                <motion.div
+                  key={key} className="cdeck-card" style={{ zIndex: 10 - pos }} initial={false}
+                  animate={{ scale: 1 - pos * 0.05, y: pos * 7, ...lean }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <CountryFace r={byKey[key]} bestKey={bestKey} />
                 </motion.div>
               )
             })}
           </div>
           <div className="cdeck-hint">
-            <button className="cdeck-nav" onClick={() => topRef.current?.fling(-1)} aria-label="Next"><Icon name="back" size={18} /></button>
+            <button className="cdeck-nav" onClick={() => topRef.current?.fling(-1)} aria-label="Send to back"><Icon name="back" size={18} /></button>
             <span>Swipe or tap a card to explore</span>
-            <button className="cdeck-nav" onClick={() => topRef.current?.fling(1)} aria-label="Next"><Icon name="arrowRight" size={18} /></button>
+            <button className="cdeck-nav" onClick={() => topRef.current?.fling(1)} aria-label="Send to back"><Icon name="arrowRight" size={18} /></button>
           </div>
         </div>
       ) : (
@@ -63,19 +67,34 @@ export default function C3Countries() {
   )
 }
 
-/* ── Full-page swipeable country card ──────────────────────────── */
-const TopCard = forwardRef(function TopCard({ r, onCycle, onOpen }, ref) {
+/* ── Full-page country card; swipe tucks it to the back of the deck ── */
+const TopCard = forwardRef(function TopCard({ r, bestKey, onCycle, onOpen }, ref) {
   const x = useMotionValue(0)
-  const rotate = useTransform(x, [-260, 260], [-11, 11])
+  const y = useMotionValue(0)
+  const scale = useMotionValue(0.95)
+  const opacity = useMotionValue(0.85)
+  const rotate = useTransform(x, [-260, 260], [-10, 10])
+  const [behind, setBehind] = useState(false)
   const leaving = useRef(false)
+
+  // rise into place as the new top card
+  useEffect(() => {
+    const a = animate(scale, 1, { duration: 0.26, ease: [0.22, 1, 0.36, 1] })
+    const b = animate(opacity, 1, { duration: 0.26 })
+    return () => { a.stop(); b.stop() }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function fling(dir) {
     if (leaving.current) return
     leaving.current = true
+    setBehind(true) // drop below the stack immediately so it reads as going under
     let done = false
-    const finish = () => { if (done) return; done = true; x.jump(0); leaving.current = false; onCycle() }
-    animate(x, dir * FLY_X, { duration: 0.32, ease: [0.3, 0.7, 0.4, 1], onComplete: finish })
-    setTimeout(finish, 500)
+    const finish = () => { if (done) return; done = true; onCycle() }
+    animate(x, dir * 40, { duration: 0.36, ease: [0.4, 0, 0.2, 1] })
+    animate(scale, 0.78, { duration: 0.36, ease: [0.4, 0, 0.2, 1] })
+    animate(opacity, 0.3, { duration: 0.36 })
+    animate(y, 34, { duration: 0.36, onComplete: finish })
+    setTimeout(finish, 560)
   }
   useImperativeHandle(ref, () => ({ fling }))
 
@@ -91,25 +110,27 @@ const TopCard = forwardRef(function TopCard({ r, onCycle, onOpen }, ref) {
 
   return (
     <motion.div
-      className="cdeck-card" style={{ x, rotate, zIndex: 10, cursor: 'pointer' }}
-      drag="x" dragElastic={0.9} dragConstraints={{ left: 0, right: 0 }}
+      className="cdeck-card" style={{ x, y, scale, opacity, rotate, zIndex: behind ? 1 : 20, cursor: 'pointer' }}
+      drag={behind ? false : 'x'} dragElastic={0.9} dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={onDragEnd} onTap={(_, info) => { if (!leaving.current && Math.abs(info.offset?.x || 0) < 8) onOpen() }}
     >
-      <CountryFace r={r} top />
+      <CountryFace r={r} top bestKey={bestKey} />
     </motion.div>
   )
 })
 
-function CountryFace({ r, top }) {
+function CountryFace({ r, top, bestKey }) {
   const { country } = r
-  const tags = matchTags(country, useC3().qual)
+  const { qual } = useC3()
+  const tags = matchTags(country, qual)
+  const perfect = top && country.key === bestKey
   return (
     <>
       <div className="cdeck-card__photo" style={{ background: country.grad }}>
         <img src={country.hero} alt="" draggable="false" onError={(e) => { e.currentTarget.style.display = 'none' }} />
       </div>
       <div className="cdeck-card__scrim" />
-      {top && <span className="cdeck-card__badge">✦ Perfect match</span>}
+      {perfect && <span className="cdeck-card__badge">✦ Perfect match</span>}
       <div className="cdeck-card__foot">
         <div className="t-lb-sm" style={{ color: 'rgba(255,255,255,0.82)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{country.country}</div>
         <h2 className="cdeck-card__name">{country.name}</h2>
