@@ -35,7 +35,7 @@ export default function C3Countries() {
       />
 
       {view === 'cards' ? (
-        <div className="screen-body" style={{ display: 'flex', flexDirection: 'column', padding: '10px 20px calc(16px + env(safe-area-inset-bottom))' }}>
+        <div className="screen-body" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10px 20px calc(16px + env(safe-area-inset-bottom))' }}>
           <div className="cdeck">
             {order.slice(0, 3).map((key) => {
               const pos = order.indexOf(key)
