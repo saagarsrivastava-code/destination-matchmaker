@@ -834,6 +834,7 @@
   box-shadow: 0 6px 18px rgba(3, 18, 35, 0.32);
 }
 .detail-topbar__book:active { transform: scale(0.96); }
+.detail-topbar__spacer { width: 40px; flex-shrink: 0; }
 .detail-hero__tags { position: absolute; top: 62px; left: 16px; right: 16px; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px; }
 .detail-hero__cap { position: absolute; left: 20px; right: 20px; bottom: 20px; z-index: 2; color: #fff; }
 .detail-hero__title { font: 700 27px/1.12 var(--font-body); letter-spacing: -0.01em; margin-top: 4px; }

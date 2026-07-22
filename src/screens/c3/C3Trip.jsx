@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Screen } from '../../components/Chrome.jsx'
 import { Button, CategoryPill, Sheet } from '../../components/ui.jsx'
 import Icon from '../../components/Icon.jsx'
-import { useC3 } from '../../state/C3Context.jsx'
-import { getCountry, getItinerary, inr, traitPills, costTiles, monthsLabel, fullDays } from '../../data/c3.js'
+import { getCountry, getItinerary, inr, traitPills, costTiles, fullDays } from '../../data/c3.js'
 
 // Scripted AI edits — each applies to the live day list and cycles.
 const AI_ACTIONS = [
@@ -42,14 +41,10 @@ const AI_ACTIONS = [
 export default function C3Trip() {
   const navigate = useNavigate()
   const { dest, id } = useParams()
-  const { qual, countryKey } = useC3()
 
   const country = getCountry(dest)
   const itinerary = getItinerary(dest, id)
   const [days, setDays] = useState(() => (itinerary ? fullDays(country, itinerary).map((d) => ({ ...d, stops: d.stops.map((s) => ({ ...s })) })) : []))
-  const [bookOpen, setBookOpen] = useState(false)
-  const [booked, setBooked] = useState(false)
-  const [paying, setPaying] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [editStop, setEditStop] = useState(null) // { di, si }
   const [editName, setEditName] = useState('')
@@ -61,11 +56,6 @@ export default function C3Trip() {
 
   const tiles = costTiles(itinerary, dest)
   const total = tiles.reduce((s, t) => s + t.value, 0)
-
-  function confirm() {
-    setPaying(true)
-    setTimeout(() => { setPaying(false); setBooked(true) }, 1400)
-  }
 
   function openEdit(di, si) {
     setEditStop({ di, si })
@@ -93,9 +83,7 @@ export default function C3Trip() {
       <div className={`detail-topbar${scrolled ? ' is-scrolled' : ''}`}>
         <button className="detail-topbar__back" onClick={() => navigate('/c3/activities')} aria-label="Back"><Icon name="back" size={22} /></button>
         <div className="detail-topbar__title">{itinerary.title}</div>
-        <button className="detail-topbar__book" onClick={() => setBookOpen(true)}>
-          <Icon name="wallet" size={15} /> Book · {inr(total)}
-        </button>
+        <div className="detail-topbar__spacer" />
       </div>
 
       <div className="screen-body" ref={scrollRef} onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 24)} style={{ paddingBottom: 96 }}>
@@ -184,36 +172,6 @@ export default function C3Trip() {
           <span className="fab__label">Ask AI</span>
         </motion.button>
       )}
-
-      {/* Booking sheet */}
-      <Sheet open={bookOpen} onClose={() => setBookOpen(false)} height="56%">
-        {booked ? (
-          <div className="empty" style={{ minHeight: 240 }}>
-            <motion.span className="celebrate__tick" style={{ width: 56, height: 56 }} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 380, damping: 20 }}>
-              <Icon name="check" size={26} />
-            </motion.span>
-            <div className="t-hd-med">Trip booked 🎉</div>
-            <p className="t-p-small muted" style={{ maxWidth: 280 }}>
-              Your {country.name} plan is locked in for {monthsLabel(qual.months)}. Tickets and vouchers land on your scapia app.
-            </p>
-            <Button variant="soft" onClick={() => { setBookOpen(false); navigate('/c3') }}>Back to start</Button>
-          </div>
-        ) : (
-          <>
-            <div className="t-hd-med" style={{ paddingTop: 6 }}>Book this trip</div>
-            <p className="t-p-small muted" style={{ marginTop: 3 }}>{itinerary.tag} · {itinerary.nights} · {qual.who}</p>
-            <div className="card" style={{ marginTop: 16 }}>
-              <div className="bookrow"><span>Estimated total ({qual.who.toLowerCase()})</span><b>{inr(total)} /pax</b></div>
-              <div className="bookrow"><span>Scapia coins on booking</span><b style={{ color: 'var(--success-green-500)' }}>+{Math.round(total / 20).toLocaleString('en-IN')}</b></div>
-              <div className="bookrow"><span>Pay today to hold</span><b>{inr(999)}</b></div>
-            </div>
-            <p className="t-lb-sm muted" style={{ marginTop: 12 }}>Free cancellation for 48 hours. Zero forex markup with your scapia card.</p>
-            <div style={{ marginTop: 16 }}>
-              <Button full variant="dark" onClick={confirm} disabled={paying}>{paying ? 'Processing…' : `Hold for ${inr(999)}`}</Button>
-            </div>
-          </>
-        )}
-      </Sheet>
 
       {/* Per-stop edit sheet */}
       <Sheet open={!!editStop} onClose={() => setEditStop(null)} height="42%">
